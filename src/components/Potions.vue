@@ -1,54 +1,45 @@
 <template>
-  <div class="potions">
+  <div class="container">
     <h1>Liste des Potions</h1>
-    <ul>
-      <li v-for="potion in potions" :key="potion.id">
-        <router-link :to="{ name: 'PotionDetails', params: { id: potion.id }}" class="potion-link">{{ potion.name }}</router-link>
-      </li>
-    </ul>
+    <router-link to="/">Accueil</router-link>
+
+    <div v-if="potions && potions.length">
+      <ul>
+        <li v-for="potion in potions" :key="potion.id">{{potion.attributes.name}}</li>
+      </ul>
+    </div>
+
+    <div v-else>
+      <p>Aucunes potions trouvé.</p>
+    </div>
+
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Potions',
-  data() {
-    return {
-      potions: []
-    };
-  },
-  mounted() {
-    this.fetchPotions();
-  },
-  methods: {
-    async fetchPotions() {
-      try {
-        const response = await fetch('https://api.potterdb.com/v1/potions');
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des potions');
-        }
-        const data = await response.json();
-        this.potions = data;
-      } catch (error) {
-        console.error(error);
-      }
+  data(){
+    return{
+      potions:[]// Variable de données pour stocker les potions
     }
+  },
+  created(){
+    axios.get('https://api.potterdb.com/v1/potions') .then(response => {
+      console.log(response.data); // Afficher les données récupérées dans la console
+      this.potions = response.data.data; // Accéder correctement aux données des potions
+    })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des potions : ', error);
+        });
   }
-};
+
+}
+
 </script>
 
 <style scoped>
-.potions {
-  padding: 20px;
-}
-
-.potion-link {
-  text-decoration: none;
-  color: #333;
-  font-size: 18px;
-}
-
-.potion-link:hover {
-  color: #007bff;
-}
+@import url('../style.css');
 </style>
