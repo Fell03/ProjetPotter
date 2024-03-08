@@ -1,19 +1,25 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Accueil</h1>
-    <router-link to="/potions">Potions</router-link>
-    <router-link to="/sorts">Sorts</router-link>
-    <router-link to="/livres">Livres</router-link>
-    <router-link to="/personnages">Personnages</router-link>
+    <nav>
+      <router-link to="/potions">Potions </router-link>
+      <router-link to="/livres">Livres </router-link>
+      <router-link to="/personnages">Personnages </router-link>
+      <router-link to="/potionsDetails">Potion Details </router-link>
+      <router-link to="/sorts">Sorts</router-link>
+    </nav>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Accueil'
-}
+<script setup>
 </script>
 
 <style scoped>
-/* Styles spécifiques à la page d'accueil */
+@import url('../style.css');
 </style>
+
+
+
+
+
+

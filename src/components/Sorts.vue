@@ -13,5 +13,5 @@ export default {
 </script>
 
 <style scoped>
-/* Styles spécifiques à la liste des sorts */
+@import url('../style.css');
 </style>

@@ -18,5 +18,5 @@ export default {
 </script>
 
 <style scoped>
-/* Styles spécifiques aux détails de la potion */
+@import url('../style.css');
 </style>
