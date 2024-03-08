@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Liste des Personnages</h1>
-    <!-- Affichage de la liste des personnages -->
+    <router-link to="/">Accueil</router-link>
   </div>
 </template>
 

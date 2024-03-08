@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Liste des Sorts</h1>
+    <router-link to="/">Accueil</router-link>
     <!-- Affichage de la liste des sorts -->
   </div>
 </template>

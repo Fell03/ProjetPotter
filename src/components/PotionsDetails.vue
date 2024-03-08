@@ -2,6 +2,7 @@
 <template>
   <div v-if="potion">
     <h1>{{ potion.name }}</h1>
+    <router-link to="/">Accueil</router-link>
     <p>{{ potion.description }}</p>
     <!-- Autres détails de la potion -->
   </div>

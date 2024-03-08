@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Liste des Potions</h1>
+    <router-link to="/">Accueil</router-link>
   </div>
 </template>
 
