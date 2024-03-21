@@ -1,17 +1,169 @@
 <template>
-  <div>
-    <h1>Liste des Personnages</h1>
-    <!-- Affichage de la liste des personnages -->
+  <div class="container">
+    <h1 class="title">Liste des Personnages</h1>
+    <router-link to="/" class="link">Accueil</router-link>
+
+    <div v-if="personnages && personnages.length">
+      <ul class="character-list">
+        <li v-for="personnage in personnages" :key="personnage.id" class="character-item">
+          <h3 class="character-name">{{ personnage.attributes.name }}</h3>
+          <p class="character-biography">{{ generateBiography(personnage.attributes) }}</p>
+          <img :src="personnage.attributes.image" alt="Image du personnage" class="character-image" />
+        </li>
+      </ul>
+      <div class="pagination">
+        <button @click="loadPreviousPage" :disabled="!pagination.prev">Page Précédente</button>
+        <button @click="loadNextPage" :disabled="!pagination.next">Page Suivante</button>
+      </div>
+    </div>
+    <div v-else>
+      <p>Aucun personnage trouvé.</p>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Personnages',
-  // Méthode fetchPersonnages() pour récupérer les personnages depuis l'API
+  data() {
+    return {
+      personnages: [], // Variable de données pour stocker les personnages
+      pagination: {
+        prev: null,
+        next: null
+      }
+    }
+  },
+  created() {
+    this.fetchPersonnages();
+  },
+  methods: {
+    fetchPersonnages(url = 'https://api.potterdb.com/v1/characters', pageSize = 20) {
+      axios.get(url, {
+        params: {
+          'page[size]': pageSize
+        }
+      })
+          .then(response => {
+            console.log(response.data); // Afficher les données récupérées dans la console
+            this.personnages = response.data.data; // Accéder correctement aux données des personnages
+            this.pagination.prev = response.data.links.prev;
+            this.pagination.next = response.data.links.next;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          })
+          .catch(error => {
+            console.error('Erreur lors de la récupération des personnages : ', error);
+          });
+    },
+    loadPreviousPage() {
+      if (this.pagination.prev) {
+        this.fetchPersonnages(this.pagination.prev);
+      }
+    },
+    loadNextPage() {
+      if (this.pagination.next) {
+        this.fetchPersonnages(this.pagination.next);
+      }
+    },
+    generateBiography(attributes) {
+      // Remplacer les valeurs null par "inconnu"
+      for (const key in attributes) {
+        if (attributes[key] === null) {
+          attributes[key] = 'inconnu';
+        }
+      }
+
+      return `${attributes.name || 'inconnu'}, né le ${attributes.born || 'inconnu'} à ${attributes.born || 'inconnu'},
+est un(e) ${attributes.species || 'inconnu'} de nationalité ${attributes.nationality || 'inconnue'}.
+Il est ${attributes.alias_names && attributes.alias_names.length > 0 ? attributes.alias_names.join(', ') : 'inconnu'},
+et a exercé le/les métier(s), dont ${attributes.jobs && attributes.jobs.length > 0 ? attributes.jobs.join(', ') : 'inconnu'}.
+${attributes.name ? attributes.name : 'Il'} était affilié(e) à la maison ${attributes.house || 'inconnue'} à Poudlard.`;
+
+    }
+  }
 }
 </script>
 
 <style scoped>
-/* Styles spécifiques à la liste des personnages */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9e9d4; /* Utiliser la même couleur de fond que sur la page d'accueil */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 36px;
+  text-align: center;
+  color: #ad4731;
+  margin-bottom: 20px;
+}
+
+.link {
+  font-size: 1.2em;
+  color: #ffffff;
+  background-color: #862e18;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-bottom: 20px; /* Ajouter un espace en bas du lien */
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.link:hover {
+  background-color: #ad4731;
+  transform: scale(1.05); /* Ajouter un effet d'agrandissement au survol */
+}
+
+.character-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.character-item {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.character-name {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.character-biography {
+  margin-bottom: 10px;
+}
+
+.character-image {
+  max-width: 100%;
+  display: block;
+  margin-top: 10px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 </style>

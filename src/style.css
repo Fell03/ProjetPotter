@@ -1,25 +1,23 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Harry P', sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  color: #333333;
+  background-color: #f9e9d4;
+}
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.container {
+  text-align: center; /* Centrer le contenu horizontalement */
+  margin-top: 20px; /* Ajouter un espace au-dessus du conteneur */
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: #862e18;
+  text-decoration: none;
 }
 a:hover {
-  color: #535bf2;
+  color: #ad4731;
 }
 
 body {
@@ -33,7 +31,11 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: #862e18;
+  margin-bottom: 20px; /* Ajouter un espacement en bas du titre */
 }
+
+
 
 button {
   border-radius: 8px;
@@ -41,13 +43,14 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-family: 'Harry P', sans-serif;
+  background-color: #ad4731;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s, color 0.25s;
+  color: #ffffff;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: #862e18;
 }
 button:focus,
 button:focus-visible {
@@ -56,6 +59,9 @@ button:focus-visible {
 
 .card {
   padding: 2em;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 #app {
@@ -65,15 +71,37 @@ button:focus-visible {
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #f9e9d4;
+    background-color: #333333;
   }
   a:hover {
-    color: #747bff;
+    color: #ffcc99;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #ffcc99;
+    color: #333333;
+  }
+  button:hover {
+    background-color: #ffc266;
+  }
+
+
+  nav {
+    display: flex; /* Utiliser flexbox pour aligner les liens */
+    justify-content: center; /* Centrer les liens horizontalement */
+    flex-wrap: wrap; /* Permettre le retour à la ligne des liens si nécessaire */
+  }
+
+  router-link {
+    margin: 10px; /* Ajouter de l'espace entre les liens */
+    font-size: 1.2em; /* Augmenter la taille du texte des liens */
+    color: #862e18; /* Changer la couleur du texte des liens */
+    text-decoration: none; /* Supprimer le soulignement des liens */
+  }
+
+  router-link:hover {
+    color: #ad4731; /* Changer la couleur du texte au survol */
   }
 }
