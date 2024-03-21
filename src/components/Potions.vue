@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>Liste des Potions</h1>
-    <router-link to="/">Accueil</router-link>
+    <router-link to="/" class="link">Accueil</router-link>
 
     <div v-if="potions && potions.length">
       <ul class="potion-list">
@@ -55,6 +55,7 @@ h1 {
   font-size: 24px;
   margin-bottom: 20px;
   color: #333;
+  text-align: center;
 }
 
 ul {
@@ -74,5 +75,21 @@ ul {
 
 .potion-link:hover {
   color: #0056b3;
+}
+
+.link {
+  font-size: 1.2em;
+  color: #ffffff;
+  background-color: #862e18;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-bottom: 20px; /* Ajouter un espace en bas du lien */
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.link:hover {
+  background-color: #ad4731;
+  transform: scale(1.05); /* Ajouter un effet d'agrandissement au survol */
 }
 </style>

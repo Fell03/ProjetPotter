@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <h1>Liste des Sorts</h1>
-    <router-link to="/">Accueil</router-link>
+    <router-link to="/" class="link">Accueil</router-link>
 
     <div v-if="sorts && sorts.length">
       <ul class="spell-list">
         <li v-for="sort in sorts" :key="sort.id" class="spell-item">
-          <h3 class="spell-name">{{ sort.attributes.name }}</h3>
+          <h2 class="spell-name">{{ sort.attributes.name }}</h2>
           <div class="spell-details">
             <p><strong>Effet:</strong> {{ sort.attributes.effect }}</p>
             <p><strong>Description:</strong> {{ getDescription(sort.attributes) }}</p>
@@ -81,19 +81,32 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #f9e9d4; /* Utiliser la même couleur de fond que sur la page d'accueil */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
+  font-size: 36px; /* Augmenter la taille du titre */
+  text-align: center; /* Centrer le titre */
+  color: #ad4731; /* Utiliser une couleur de titre similaire à celle de l'accueil */
+  margin-bottom: 30px;
 }
 
-.router-link {
-  margin-right: 10px;
+.link {
+  font-size: 1.2em;
+  color: #ffffff;
+  background-color: #862e18;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-bottom: 20px; /* Ajouter un espace en bas du lien */
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.link:hover {
+  background-color: #ad4731;
+  transform: scale(1.05); /* Ajouter un effet d'agrandissement au survol */
 }
 
 .spell-list {
@@ -110,9 +123,9 @@ h1 {
 }
 
 .spell-name {
-  font-size: 20px;
+  font-size: 24px; /* Augmenter la taille du nom du sort */
   margin-bottom: 10px;
-  color: #333;
+  color: #333; /* Utiliser une couleur de texte similaire à celle de l'accueil */
 }
 
 .spell-details {
