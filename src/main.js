@@ -17,7 +17,7 @@ const router = createRouter({
         { path: '/potions', component: Potions },
         { path: '/livres', component: Livres},
         { path: '/personnages', component: Personnages},
-        { path: '/potionsDetails', component: PotionsDetails},
+        { path: '/potion/:id', component: PotionsDetails},
         { path: '/sorts', component: Sorts}
     ]
 });
