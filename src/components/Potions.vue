@@ -4,10 +4,10 @@
     <router-link to="/">Accueil</router-link>
 
     <div v-if="potions && potions.length">
-      <ul>
+      <ul class="potion-list">
         <!-- Utiliser router-link pour envelopper chaque nom de potion -->
-        <li v-for="potion in potions" :key="potion.id">
-          <router-link :to="'/potion/' + potion.id">{{ potion.attributes.name }}</router-link>
+        <li v-for="potion in potions" :key="potion.id" class="potion-item">
+          <router-link :to="'/potion/' + potion.id" class="potion-link">{{ potion.attributes.name }}</router-link>
         </li>
       </ul>
     </div>
@@ -42,5 +42,37 @@ export default {
 </script>
 
 <style scoped>
-@import url('../style.css');
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.potion-item {
+  margin-bottom: 10px;
+}
+
+.potion-link {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.potion-link:hover {
+  color: #0056b3;
+}
 </style>

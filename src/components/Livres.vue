@@ -4,14 +4,18 @@
     <router-link to="/">Accueil</router-link>
 
     <div v-if="livres && livres.length">
-      <ul>
-        <li v-for="livre in livres" :key="livre.id">
-          <h3><strong>Titre : </strong>{{ livre.attributes.title }}</h3>
-          <p><strong>Auteur : </strong>{{ livre.attributes.author }}</p>
-          <p>Date de publication : {{ livre.attributes.release_date }}</p>
-          <img :src="livre.attributes.cover" alt="Image du livre" />
+      <ul class="books-list">
+        <li v-for="livre in livres" :key="livre.id" class="book-item">
+          <h3 class="book-title"><strong>Titre : </strong>{{ livre.attributes.title }}</h3>
+          <p class="book-author"><strong>Auteur : </strong>{{ livre.attributes.author }}</p>
+          <p class="book-release-date"><strong>Date de publication :</strong> {{ livre.attributes.release_date }}</p>
+          <img :src="livre.attributes.cover" alt="Image du livre" class="book-cover" />
         </li>
       </ul>
+      <div class="pagination">
+        <button @click="loadPreviousPage" :disabled="!pagination.prev">Page Précédente</button>
+        <button @click="loadNextPage" :disabled="!pagination.next">Page Suivante</button>
+      </div>
     </div>
     <div v-else>
       <p>Aucun livre trouvé.</p>
@@ -26,7 +30,11 @@ export default {
   name: 'Livres',
   data() {
     return {
-      livres: []
+      livres: [],
+      pagination: {
+        prev: null,
+        next: null
+      }
     }
   },
   created() {
@@ -40,18 +48,14 @@ export default {
         }
       })
           .then(response => {
-            console.log(response.data); // Afficher les données récupérées dans la console
-            this.livres = response.data.data; // Accédez correctement aux données des livres
+            this.livres = response.data.data;
             this.pagination.prev = response.data.links.prev;
             this.pagination.next = response.data.links.next;
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
           })
           .catch(error => {
             console.error('Erreur lors de la récupération des livres : ', error);
           });
     },
-
     loadPreviousPage() {
       if (this.pagination.prev) {
         this.fetchLivres(this.pagination.prev);
@@ -67,5 +71,67 @@ export default {
 </script>
 
 <style scoped>
-  @import url('../style.css');
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.router-link {
+  margin-right: 10px;
+}
+
+.books-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.book-item {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.book-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.book-author,
+.book-release-date {
+  margin-bottom: 10px;
+}
+
+.book-cover {
+  max-width: 200px; /* Ajustez la taille maximale selon vos besoins */
+  display: block;
+  margin-top: 10px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 </style>
