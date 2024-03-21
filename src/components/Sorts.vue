@@ -5,7 +5,14 @@
 
     <div v-if="sorts && sorts.length">
       <ul>
-        <li v-for="sort in sorts" :key="sort.id">{{ sort.attributes.name }}</li>
+        <li v-for="sort in sorts" :key="sort.id">
+          <h3>{{ sort.attributes.name }}</h3>
+          <p><strong>Effet:</strong> {{ sort.attributes.effect }}</p>
+          <p><strong>Description:</strong>
+            {{ getDescription(sort.attributes) }}
+          </p>
+          <img :src="sort.attributes.image" alt="Image du sort" />
+        </li>
       </ul>
     </div>
     <div v-else>
@@ -33,6 +40,11 @@ export default {
         .catch(error => {
           console.error('Erreur lors de la récupération des sorts : ', error);
         });
+  },
+  methods: {
+    getDescription(attributes) {
+      return `${attributes.slug}, ${attributes.category}, ${attributes.creator ? `Créateur: ${attributes.creator},` : ''} Main: ${attributes.hand}, Incantation: ${attributes.incantation}`;
+    }
   }
 }
 </script>
