@@ -3,6 +3,12 @@
     <h1>Liste des Sorts</h1>
     <router-link to="/">Accueil</router-link>
 
+    <div>
+      <input type="text" v-model="searchQuery" placeholder="Rechercher un sort">
+      <button @click="search">Rechercher</button>
+      <button @click="clearSearch">Effacer</button>
+    </div>
+
     <div v-if="sorts && sorts.length">
       <ul>
         <li v-for="sort in sorts" :key="sort.id">
@@ -35,7 +41,8 @@ export default {
       pagination: {
         prev: null,
         next: null
-      }
+      },
+      searchQuery: '' // Variable pour stocker la requête de recherche
     }
   },
   // Méthode fetchSorts() pour récupérer les sorts depuis l'API
@@ -64,6 +71,49 @@ export default {
     getDescription(attributes) {
       return `${attributes.slug}, ${attributes.category}, ${attributes.creator ? `Créateur: ${attributes.creator},` : ''} Main: ${attributes.hand}, Incantation: ${attributes.incantation}`;
     },
+
+
+    search() {
+      const query = this.searchQuery.toLowerCase();
+
+      // Réinitialiser la liste des sorts
+      this.sorts = [];
+
+      // Effectuer une recherche sur chaque page
+      const searchPerPage = async (url) => {
+        try {
+          const response = await axios.get(url);
+          const pageSorts = response.data.data.filter(sort => {
+            // Filtrer les sorts en fonction de la requête de recherche
+            return sort.attributes.name.toLowerCase().includes(query) ||
+                sort.attributes.effect.toLowerCase().includes(query);
+          });
+          // Ajouter les sorts trouvés à la liste principale
+          this.sorts.push(...pageSorts);
+
+          // Si une page suivante existe, effectuer une recherche récursive
+          if (response.data.links.next) {
+            await searchPerPage(response.data.links.next);
+          }
+        } catch (error) {
+          console.error('Erreur lors de la recherche de sorts : ', error);
+        }
+      };
+
+      // Commencer la recherche sur la première page
+      searchPerPage('https://api.potterdb.com/v1/spells');
+    },
+
+    clearSearch() {
+      // Réinitialiser la requête de recherche et recharger les sorts
+      this.searchQuery = '';
+      this.fetchSorts();
+    },
+
+
+
+
+
     loadPreviousPage() {
       if (this.pagination.prev) {
         this.fetchSorts(this.pagination.prev);
@@ -73,6 +123,15 @@ export default {
       if (this.pagination.next) {
         this.fetchSorts(this.pagination.next);
       }
+    }
+  },
+  computed: {
+    filteredSorts() {
+      // Filtrer les sorts en fonction de la requête de recherche
+      return this.sorts.filter(sort => {
+        return sort.attributes.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            sort.attributes.effect.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     }
   }
 }
