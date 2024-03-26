@@ -59,7 +59,7 @@ export default {
             this.pagination.prev = response.data.links.prev;
             this.pagination.next = response.data.links.next;
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({top: 0, behavior: 'smooth'});
           })
           .catch(error => {
             console.error('Erreur lors de la récupération des personnages : ', error);
@@ -131,7 +131,7 @@ ${attributes.name ? attributes.name : 'Il'} était affilié(e) à la maison ${at
 
   computed: {
     filteredPersonnages() {
-      // Filtrer les personnages en fonction de la requête de recherche
+      // Filtrer les personnages en fonction de la requête de recherch
       return this.personnages.filter(personnage => {
         return personnage.attributes.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       });

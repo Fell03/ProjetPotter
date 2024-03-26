@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     filteredLivres() {
-      // Filtrer les livres en fonction de la requête de recherche
+      // Filtrer les livres en fonction de la requête de recherch
       return this.livres.filter(livre => {
         return livre.attributes.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || livre.attributes.author.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
