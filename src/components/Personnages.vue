@@ -131,7 +131,7 @@ ${attributes.name ? attributes.name : 'Il'} était affilié(e) à la maison ${at
 
   computed: {
     filteredPersonnages() {
-      // Filtrer les personnages en fonction de la requête de recherch
+      // Filtrer les personnages en fonction de la requête de recherche
       return this.personnages.filter(personnage => {
         return personnage.attributes.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
