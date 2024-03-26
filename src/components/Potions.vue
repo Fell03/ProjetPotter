@@ -98,7 +98,7 @@ export default {
         }
       };
 
-      // Commencer la recherche sur la première pag
+      // Commencer la recherche sur la première page
       searchPerPage('https://api.potterdb.com/v1/potions');
     },
     clearSearch() {
