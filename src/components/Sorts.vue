@@ -114,7 +114,7 @@ export default {
   },
   computed: {
     filteredSorts() {
-      // Filtrer les sorts affichés en fonction de la requête de recherche
+      // Filtrer les sorts affichés en fonction de la requête de recherch
       return this.sorts.filter(sort => {
         return sort.attributes.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
             sort.attributes.effect.toLowerCase().includes(this.searchQuery.toLowerCase());
