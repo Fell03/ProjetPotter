@@ -76,31 +76,36 @@ export default {
     getDescription(attributes) {
       return `${attributes.slug}, ${attributes.category}, ${attributes.creator ? `Créateur: ${attributes.creator},` : ''} Main: ${attributes.hand}, Incantation: ${attributes.incantation}`;
     },
-
     async search() {
       const query = this.searchQuery.toLowerCase();
 
       // Réinitialiser la liste des sorts affichés
       this.sorts = [];
 
-      // Filtrer les sorts en fonction de la requête de recherche
-      this.filterSorts(query);
+      try {
+        // Effectuer une nouvelle requête pour récupérer tous les sorts depuis l'API
+        const response = await axios.get('https://api.potterdb.com/v1/spells');
+        this.allSorts = response.data.data;
+
+        // Filtrer les sorts en fonction de la requête de recherche sur la liste complète de tous les sorts
+        this.filterSorts(this.allSorts, query);
+      } catch (error) {
+        console.error('Erreur lors de la récupération de tous les sorts : ', error);
+      }
     },
 
-    filterSorts(query) {
+    filterSorts(allSorts, query) {
       // Filtrer tous les sorts en fonction de la requête de recherche
-      this.sorts = this.allSorts.filter(sort => {
+      this.sorts = allSorts.filter(sort => {
         return sort.attributes.name.toLowerCase().includes(query) ||
             sort.attributes.effect.toLowerCase().includes(query);
-      }).slice(0, 20); // Limiter à 20 sorts affichés
+      });
     },
-
     clearSearch() {
       // Réinitialiser la requête de recherche et recharger les sorts
       this.searchQuery = '';
       this.sorts = this.allSorts.slice(0, 20); // Réinitialiser les sorts affichés à la première page
     },
-
     loadPreviousPage() {
       if (this.pagination.prev) {
         this.fetchSorts(this.pagination.prev);
@@ -112,17 +117,17 @@ export default {
       }
     }
   },
+
   computed: {
     filteredSorts() {
       // Filtrer les sorts affichés en fonction de la requête de recherch
-      return this.sorts.filter(sort => {
-        return sort.attributes.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            sort.attributes.effect.toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
+      return this.sorts;
     }
   }
 }
 </script>
+
+
 
 <style scoped>
 @import url('../style.css');
