@@ -3,14 +3,18 @@
     <h1>Liste des Sorts</h1>
     <router-link to="/" class="link">Accueil</router-link>
 
-    <div v-if="sorts && sorts.length">
+    <div>
+      <input type="text" v-model="searchQuery" placeholder="Rechercher un sort">
+      <button @click="search">Rechercher</button>
+      <button @click="clearSearch">Effacer</button>
+    </div>
+
+    <div v-if="filteredSorts && filteredSorts.length">
       <ul class="spell-list">
-        <li v-for="sort in sorts" :key="sort.id" class="spell-item">
-          <h2 class="spell-name">{{ sort.attributes.name }}</h2>
-          <div class="spell-details">
-            <p><strong>Effet:</strong> {{ sort.attributes.effect }}</p>
-            <p><strong>Description:</strong> {{ getDescription(sort.attributes) }}</p>
-          </div>
+        <li v-for="sort in filteredSorts" :key="sort.id" class="spell-item">
+          <h3 class="spell-name">{{ sort.attributes.name }}</h3>
+          <p><strong>Effet:</strong> {{ sort.attributes.effect }}</p>
+          <p><strong>Description:</strong> {{ getDescription(sort.attributes) }}</p>
           <img :src="sort.attributes.image" alt="Image du sort" class="spell-image" />
         </li>
       </ul>
@@ -27,40 +31,66 @@
 
 <script>
 import axios from 'axios';
+
 export default {
   name: 'Sorts',
   data() {
     return {
-      sorts: [], // Variable de données pour stocker les sorts
+      allSorts: [],
+      sorts: [],
       pagination: {
         prev: null,
         next: null
-      }
+      },
+      searchQuery: ''
     }
   },
   created() {
     this.fetchSorts();
   },
   methods: {
-    fetchSorts(url = 'https://api.potterdb.com/v1/spells', pageSize = 20) {
-      axios.get(url, {
-        params: {
-          'page[size]': pageSize
-        }
-      })
-          .then(response => {
-            this.sorts = response.data.data;
-            this.pagination.prev = response.data.links.prev;
-            this.pagination.next = response.data.links.next;
+    async fetchSorts(url = 'https://api.potterdb.com/v1/spells', pageSize = 20) {
+      try {
+        const response = await axios.get(url, {
+          params: {
+            'page[size]': pageSize
+          }
+        });
+        console.log(response.data);
+        this.allSorts = response.data.data;
+        this.pagination.prev = response.data.links.prev;
+        this.pagination.next = response.data.links.next;
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          })
-          .catch(error => {
-            console.error('Erreur lors de la récupération des sorts : ', error);
-          });
+        this.sorts = this.allSorts.slice(0, pageSize);
+
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      } catch (error) {
+        console.error('Erreur lors de la récupération des sorts : ', error);
+      }
     },
     getDescription(attributes) {
       return `${attributes.slug}, ${attributes.category}, ${attributes.creator ? `Créateur: ${attributes.creator},` : ''} Main: ${attributes.hand}, Incantation: ${attributes.incantation}`;
+    },
+    async search() {
+      const query = this.searchQuery.toLowerCase();
+      this.sorts = [];
+      try {
+        const response = await axios.get('https://api.potterdb.com/v1/spells');
+        this.allSorts = response.data.data;
+        this.filterSorts(this.allSorts, query);
+      } catch (error) {
+        console.error('Erreur lors de la récupération de tous les sorts : ', error);
+      }
+    },
+    filterSorts(allSorts, query) {
+      this.sorts = allSorts.filter(sort => {
+        return sort.attributes.name.toLowerCase().includes(query) ||
+            sort.attributes.effect.toLowerCase().includes(query);
+      });
+    },
+    clearSearch() {
+      this.searchQuery = '';
+      this.sorts = this.allSorts.slice(0, 20);
     },
     loadPreviousPage() {
       if (this.pagination.prev) {
@@ -72,6 +102,12 @@ export default {
         this.fetchSorts(this.pagination.next);
       }
     }
+  },
+
+  computed: {
+    filteredSorts() {
+      return this.sorts;
+    }
   }
 }
 </script>
@@ -81,15 +117,15 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9e9d4; /* Utiliser la même couleur de fond que sur la page d'accueil */
+  background-color: #f9e9d4;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  font-size: 36px; /* Augmenter la taille du titre */
-  text-align: center; /* Centrer le titre */
-  color: #ad4731; /* Utiliser une couleur de titre similaire à celle de l'accueil */
+  font-size: 36px;
+  text-align: center;
+  color: #ad4731;
   margin-bottom: 30px;
 }
 
@@ -99,14 +135,14 @@ h1 {
   background-color: #862e18;
   border-radius: 8px;
   padding: 10px 20px;
-  margin-bottom: 20px; /* Ajouter un espace en bas du lien */
+  margin-bottom: 20px;
   text-decoration: none;
   transition: background-color 0.3s, color 0.3s, transform 0.3s;
 }
 
 .link:hover {
   background-color: #ad4731;
-  transform: scale(1.05); /* Ajouter un effet d'agrandissement au survol */
+  transform: scale(1.05);
 }
 
 .spell-list {
@@ -123,9 +159,9 @@ h1 {
 }
 
 .spell-name {
-  font-size: 24px; /* Augmenter la taille du nom du sort */
+  font-size: 24px;
   margin-bottom: 10px;
-  color: #333; /* Utiliser une couleur de texte similaire à celle de l'accueil */
+  color: #333;
 }
 
 .spell-details {
