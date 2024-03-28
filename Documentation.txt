@@ -1,0 +1,35 @@
+Installation du projet :
+
+Cloner le dépôt git avec le ssh ou l'url.
+
+Utilisation :
+
+Le projet peut-être lancé sur WebStorm si l'utilisateur possède le logiciel.
+Sinon il lui faut node.js d'installer.
+
+Une fois le projet lancé l'utilisateur arrive sur une page d'accueil qui lui propose quatre choix :
+La page des potions, qui liste toutes les potions, mais pas en détails, si l'utilisateur veut avoir le détail d'une potion, il lui suffit d'appuyer sur le nom de celle-ci, alors une nouvelle page s'ouvre avec les détails de la potion choisi.
+La page des livres, qui liste tous les livres existants de la licence Harry Potter
+La page des personnages, qui liste les personnages existant de la licence Harry Potter.
+La page de sorts, qui liste les sorts existants dans l'univers d'Harry Potter.
+
+Chaque page possède une option de recherche.
+
+Il est possible de changer de pages en appuyant sur "page suivante" en bas.
+
+Chaque page possède un bouton qui ramène à l'accueil, seules les pages des détails des potions possèdent un bouton qui ramène à la liste des potions. 
+
+Structure du projet :
+
+Le dossier assets est décomposé de manière suivante :
+Le dossier components avec les fichiers suivants :
+- Accueil.vue
+- Livres.vue
+- Personnages.vue
+- Potions.vue
+- PotionsDetails.vue
+- Sorts.vue
+Les fichiers suivants :
+- App.vue
+- main.js
+- stye.css
